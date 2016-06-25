@@ -54,16 +54,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Entites\InventoryOperation.cs" />
+    <Compile Include="Entites\Product.cs" />
+    <Compile Include="Entites\ShoppingCart.cs" />
+    <Compile Include="Entites\ShoppingCartItem.cs" />
     <Compile Include="Interfaces\IInventoryOperationRepository.cs" />
     <Compile Include="Interfaces\IProductRepository.cs" />
     <Compile Include="Interfaces\IShoppingCartIteam.cs" />
     <Compile Include="Interfaces\IShoppingCartRepository.cs" />
-    <Compile Include="Entites\InventoryOperation.cs" />
     <Compile Include="Repositories\InventoryOperationRepository.cs" />
-    <Compile Include="Entites\Product.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
-    <Compile Include="Entites\ShoppingCart.cs" />
-    <Compile Include="Entites\ShoppingCartItem.cs" />
     <Compile Include="Repositories\ShoppingCartItemRepository.cs" />
     <Compile Include="Repositories\ShoppingCartRepository.cs" />
     <Compile Include="Tests.feature.cs">
@@ -71,6 +71,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Tests.feature</DependentUpon>
     </Compile>
+    <Compile Include="TestsSteps.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
