@@ -30,9 +30,9 @@ namespace UnitTestProject1
         [Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute()]
         public static void FeatureSetup(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext testContext)
         {
-            testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Tests", "In order to avoid silly mistakes\r\nAs a math idiot\r\nI want to be told the sum of t" +
-                    "wo numbers", ProgrammingLanguage.CSharp, ((string[])(null)));
+            testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner(null, 0);
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Tests", "\tIn order to avoid silly mistakes\r\n\tWe do silly tests\r\n\tSo we can try not to fuck" +
+                    " shit up", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -70,23 +70,84 @@ namespace UnitTestProject1
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Add two numbers")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Shopping Cart Checkout")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Tests")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("mytag")]
-        public virtual void AddTwoNumbers()
+        public virtual void ShoppingCartCheckout()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add two numbers", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Shopping Cart Checkout", new string[] {
                         "mytag"});
 #line 7
 this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Id",
+                        "User",
+                        "State",
+                        "Date"});
+            table1.AddRow(new string[] {
+                        "1",
+                        "Carlos",
+                        "Pending",
+                        "24/06/16"});
 #line 8
- testRunner.Given("I have entered 50 into the calculator", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 9
- testRunner.And("I have entered 70 into the calculator", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 10
- testRunner.When("I press add", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.Given("I have this ShoppingCart item", ((string)(null)), table1, "Given ");
+#line hidden
+            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Id",
+                        "CartId",
+                        "ProductId",
+                        "Quantity"});
+            table2.AddRow(new string[] {
+                        "0",
+                        "1",
+                        "1",
+                        "2"});
+            table2.AddRow(new string[] {
+                        "1",
+                        "1",
+                        "2",
+                        "3"});
+            table2.AddRow(new string[] {
+                        "2",
+                        "1",
+                        "3",
+                        "1"});
 #line 11
- testRunner.Then("the result should be 120 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("The items in the cart are", ((string)(null)), table2, "And ");
+#line 16
+ testRunner.And("There is enough inventory", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 17
+ testRunner.When("I make the checkout", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 18
+ testRunner.Then("The total amount of the cart is 1800", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Id",
+                        "ProductId",
+                        "Quantity",
+                        "Type",
+                        "Date"});
+            table3.AddRow(new string[] {
+                        "1",
+                        "1",
+                        "3",
+                        "Sale",
+                        "10/06/16"});
+            table3.AddRow(new string[] {
+                        "2",
+                        "2",
+                        "2",
+                        "Sale",
+                        "10/06/16"});
+            table3.AddRow(new string[] {
+                        "3",
+                        "3",
+                        "4",
+                        "Sale",
+                        "10/06/16"});
+#line 19
+ testRunner.And("We subtract the quantity buyed", ((string)(null)), table3, "And ");
 #line hidden
             this.ScenarioCleanup();
         }
