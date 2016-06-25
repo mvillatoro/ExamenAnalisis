@@ -71,6 +71,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Tests.feature</DependentUpon>
     </Compile>
+    <Compile Include="TestsSteps.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

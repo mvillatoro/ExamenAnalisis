@@ -9,7 +9,7 @@ namespace UnitTestProject1
 {
     public class InventoryOperation
     {
-        private static int _idSequence = 0;
+        private static int _idSequence = 1;
         public int OperationId;
         public int ProductId;
         public int ProductQuatity;

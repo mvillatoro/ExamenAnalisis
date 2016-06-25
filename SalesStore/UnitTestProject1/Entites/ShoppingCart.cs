@@ -8,7 +8,7 @@ namespace UnitTestProject1
 {
     public class ShoppingCart
     {
-        private static int _idSequence = 0;
+        private static int _idSequence = 1;
         public int CartId;
         public string CartUserName;
         public string CartState;

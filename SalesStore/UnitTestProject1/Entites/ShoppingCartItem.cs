@@ -8,16 +8,16 @@ namespace UnitTestProject1
 {
     class ShoppingCartItem
     {
-        private static int _idSequence = 0;
+        private static int _idSequence = 1;
 
-        public int Id;
+        private int _id;
         public int CartId;
         public int ProductId;
         public int Quantity;
 
         public ShoppingCartItem(int cartId, int productId, int quantity)
         {
-            Id = GetIdSequence();
+            _id = GetIdSequence();
             CartId = cartId;
             ProductId = productId;
             Quantity = quantity;

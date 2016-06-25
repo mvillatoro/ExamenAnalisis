@@ -8,7 +8,7 @@ namespace UnitTestProject1
 {
     public class Product
     {
-        private static int _idSequence = 0;
+        private static int _idSequence = 1;
         public int ProductId;
         public string ProductCode;
         public string ProductName;
