@@ -14,15 +14,15 @@ namespace UnitTestProject1
         public string CartState;
         public DateTime CartCreationTime;  
 
-        public ShoppingCart(string cartUserName, string cartState, DateTime cartCreationTime)
+        public ShoppingCart(int cartId,string cartUserName, string cartState, DateTime cartCreationTime)
         {
-            CartId = GetNextId();
+            CartId = cartId;
             CartUserName = cartUserName;
             CartState = cartState;
             CartCreationTime = cartCreationTime;
         }
 
-        private static int GetNextId()
+        public static int GetNextId()
         {
             return _idSequence++;
         }

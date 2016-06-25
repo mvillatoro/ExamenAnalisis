@@ -24,3 +24,18 @@ Scenario: Shopping Cart Checkout
 		| 4  |    1      |    2     |   Sale   | 10/06/16 |
 		| 5  |    2      |    3     |   Sale   | 10/06/16 |
 		| 6  |    3      |    1     |   Sale   | 10/06/16 |
+
+Scenario: Checkout with out of stock
+		Given I have this ShoppingCart item 
+		| Id | User | State |  Date  |
+		| 1  |Carlos|Pending|08/06/16|
+	And The items in the cart are 
+		| Id | CartId | ProductId | Quantity |
+		| 0  |   1    |    1      |     10    | 
+		| 1  |   1    |    2      |     3    |
+		| 2  |   1    |    3      |     1    |
+	And There is not  enough inventory
+	When I make the checkout
+	Then Send an error email
+
+	 

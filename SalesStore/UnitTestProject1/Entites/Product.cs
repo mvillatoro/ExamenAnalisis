@@ -15,16 +15,16 @@ namespace UnitTestProject1
         public string ProductDescription;
         public float ProductPrice;
 
-        public Product(string productCode, string productName, string productDescription, float productPrice)
+        public Product(int productId, string productCode, string productName, string productDescription, float productPrice)
         {
-            ProductId = GetNextId();
+            ProductId = productId;
             ProductCode = productCode;
             ProductName = productName;
             ProductDescription = productDescription;
             ProductPrice = productPrice;
         }
 
-        private static int GetNextId()
+        public static int GetNextId()
         {
             return _idSequence++;
         }

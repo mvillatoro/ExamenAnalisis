@@ -168,6 +168,60 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Checkout with out of stock")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Tests")]
+        public virtual void CheckoutWithOutOfStock()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Checkout with out of stock", ((string[])(null)));
+#line 28
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Id",
+                        "User",
+                        "State",
+                        "Date"});
+            table4.AddRow(new string[] {
+                        "1",
+                        "Carlos",
+                        "Pending",
+                        "08/06/16"});
+#line 29
+  testRunner.Given("I have this ShoppingCart item", ((string)(null)), table4, "Given ");
+#line hidden
+            TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Id",
+                        "CartId",
+                        "ProductId",
+                        "Quantity"});
+            table5.AddRow(new string[] {
+                        "0",
+                        "1",
+                        "1",
+                        "10"});
+            table5.AddRow(new string[] {
+                        "1",
+                        "1",
+                        "2",
+                        "3"});
+            table5.AddRow(new string[] {
+                        "2",
+                        "1",
+                        "3",
+                        "1"});
+#line 32
+ testRunner.And("The items in the cart are", ((string)(null)), table5, "And ");
+#line 37
+ testRunner.And("There is not  enough inventory", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 38
+ testRunner.When("I make the checkout", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 39
+ testRunner.Then("Send an error email", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

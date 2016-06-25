@@ -16,16 +16,16 @@ namespace UnitTestProject1
         public string Type;
         public DateTime CheckInTime;
 
-        public InventoryOperation(int productId, int productQuantity, string type, DateTime checkInTime)
+        public InventoryOperation(int operationId, int productId, int productQuantity, string type, DateTime checkInTime)
         {
-            OperationId = GetIdSequence();
+            OperationId = operationId;
             ProductId = productId;
             ProductQuatity = productQuantity;
             Type = type;
             CheckInTime = checkInTime;
         }
 
-        private static int GetIdSequence()
+        public static int GetIdSequence()
         {
             return _idSequence++;
         }

@@ -9,15 +9,15 @@
         public int ProductId;
         public int Quantity;
 
-        public ShoppingCartItem(int cartId, int productId, int quantity)
+        public ShoppingCartItem(int cartItemId, int cartId, int productId, int quantity)
         {
-            _id = GetIdSequence();
+            _id = cartItemId;
             CartId = cartId;
             ProductId = productId;
             Quantity = quantity;
         }
 
-        private static int GetIdSequence()
+        public static int GetIdSequence()
         {
             return _idSequence++;
         }

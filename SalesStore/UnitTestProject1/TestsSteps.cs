@@ -34,7 +34,7 @@ namespace UnitTestProject1
                 var user = table.Rows[i].Values.ToList()[1];
                 var state = table.Rows[i].Values.ToList()[2];
                 var date = table.Rows[i].Values.ToList()[3];
-                _currentShoppingCart= new ShoppingCart(user, state, Convert.ToDateTime(date));
+                _currentShoppingCart= new ShoppingCart(ShoppingCart.GetNextId() ,user, state, Convert.ToDateTime(date));
             }
         }
         
@@ -46,7 +46,7 @@ namespace UnitTestProject1
                 var cartId = Int32.Parse(table.Rows[i].Values.ToList().ElementAt(1));
                 var productId = Int32.Parse(table.Rows[i].Values.ToList().ElementAt(2));
                 var quantity = Int32.Parse(table.Rows[i].Values.ToList().ElementAt(3));
-                _currentShoppingCartItems.Add(new ShoppingCartItem(cartId, productId, quantity));
+                _currentShoppingCartItems.Add(new ShoppingCartItem(ShoppingCartItem.GetIdSequence() ,cartId, productId, quantity));
             }
         }
         
@@ -55,15 +55,15 @@ namespace UnitTestProject1
         {
             _products = new List<Product>()
             {
-                new Product("001", "USB", "2 GB Black", 200f),
-                new Product("002", "Montior", "40 pulgadas", 300f),
-                new Product("003", "SDD", "1 TB Black", 500f)
+                new Product(Product.GetNextId(), "001", "USB", "2 GB Black", 200f),
+                new Product(Product.GetNextId(),"002", "Montior", "40 pulgadas", 300f),
+                new Product(Product.GetNextId(),"003", "SDD", "1 TB Black", 500f)
             };
             _inventoryOperations = new List<InventoryOperation>()
             {
-                new InventoryOperation(1,5,"Purchase",DateTime.Now),
-                new InventoryOperation(2,5,"Purchase",DateTime.Now),
-                new InventoryOperation(3,5,"Purchase",DateTime.Now)
+                new InventoryOperation(InventoryOperation.GetIdSequence(), 1,5,"Purchase",DateTime.Now),
+                new InventoryOperation(InventoryOperation.GetIdSequence(), 2,5,"Purchase",DateTime.Now),
+                new InventoryOperation(InventoryOperation.GetIdSequence(),3,5,"Purchase",DateTime.Now)
             };
             _productMock.Setup(rep => rep.GetAll()).Returns(_products);
             _productMock.Setup(rep => rep.GetProduct(It.IsAny<int>())).Returns((int id)=> _products.Single(x => x.ProductId==id));
@@ -75,7 +75,7 @@ namespace UnitTestProject1
             _inventoryOpMock.Setup(rep => rep.Insert(It.IsAny<InventoryOperationInsertModel>())).Returns(
                 (InventoryOperationInsertModel operation) =>
                 {
-                     var Operation =  new InventoryOperation(operation.ProductId, operation.Quantity, operation.Type, operation.Date);
+                     var Operation =  new InventoryOperation(InventoryOperation.GetIdSequence(), operation.ProductId, operation.Quantity, operation.Type, operation.Date);
                     _inventoryOperations.Add(Operation);
                     return Operation;
                 });
@@ -112,5 +112,20 @@ namespace UnitTestProject1
             }
             Assert.AreEqual(_inventoryOperations.Count ,cont);
         }
+
+        [Given(@"There is not  enough inventory")]
+        public void GivenThereIsNotEnoughInventory()
+        {
+            
+        }
+
+        [Then(@"Send an error email")]
+        public void ThenSendAnErrorEmail()
+        {
+            ScenarioContext.Current.Pending();
+        }
+
+
+
     }
 }
