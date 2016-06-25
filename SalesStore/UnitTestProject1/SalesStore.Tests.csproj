@@ -54,7 +54,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="InventoryOperation.cs" />
     <Compile Include="Product.cs" />
+    <Compile Include="ShoppingCart.cs" />
+    <Compile Include="ShoppingCartItem.cs" />
     <Compile Include="Tests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
