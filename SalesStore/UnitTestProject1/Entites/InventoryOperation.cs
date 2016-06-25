@@ -30,10 +30,19 @@ namespace UnitTestProject1
             return _idSequence++;
         }
 
-        public void ReduceQuantity(int quantity)
+        public static void ResetSequence()
         {
-            if(this.ProductQuatity>quantity)
+            _idSequence = 1;
+        }
+
+        public bool ReduceQuantity(int quantity)
+        {
+            if (this.ProductQuatity > quantity)
+            {
                 this.ProductQuatity -= quantity;
+                return true;
+            }
+            return false;
         }
     }
 }

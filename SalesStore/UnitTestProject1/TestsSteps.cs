@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Components.DictionaryAdapter;
+using Castle.Core.Internal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TechTalk.SpecFlow;
@@ -21,6 +22,7 @@ namespace UnitTestProject1
         List<Product> _products;
         readonly Mock<IProductRepository> _productMock = new Mock<IProductRepository>();
         readonly Mock<IInventoryOperationRepository> _inventoryOpMock = new Mock<IInventoryOperationRepository>();
+        readonly Mock<IMailManager> _mailManagetMock = new Mock<IMailManager>();
         Mock<IShoppingCartItem> _shoppingCartItemMock = new Mock<IShoppingCartItem>();
         private bool _existance = false;
         private float _total;
@@ -29,6 +31,21 @@ namespace UnitTestProject1
         [Given(@"I have this ShoppingCart item")]
         public void GivenIHaveThisShoppingCartItem(Table table)
         {
+            if(!_currentShoppingCartItems.IsNullOrEmpty())
+                _currentShoppingCartItems.Clear();
+
+            if(!_inventoryOperations.IsNullOrEmpty())
+                _inventoryOperations.Clear();
+
+            if(!_products.IsNullOrEmpty())
+                _products.Clear();
+            
+            ShoppingCart.ResetSequence();
+            Product.ResetSequence();
+            ShoppingCartItem.ResetSequence();
+            InventoryOperation.ResetSequence();
+            
+
             for (int i = 0; i < table.RowCount; i++)
             {
                 var user = table.Rows[i].Values.ToList()[1];
@@ -79,16 +96,49 @@ namespace UnitTestProject1
                     _inventoryOperations.Add(Operation);
                     return Operation;
                 });
-            var store = new Store(_productMock.Object, _inventoryOpMock.Object, _shoppingCartItemMock.Object);
+            var store = new Store(_productMock.Object, _inventoryOpMock.Object, _shoppingCartItemMock.Object, _mailManagetMock.Object);
             _existance = store.CheckExistance(_currentShoppingCart.CartId);
             
+        }
+
+        [Given(@"There is not  enough inventory")]
+        public void GivenThereIsNotEnoughInventory()
+        {
+            _products = new List<Product>()
+            {
+                new Product(Product.GetNextId(), "001", "USB", "2 GB Black", 200f),
+                new Product(Product.GetNextId(),"002", "Montior", "40 pulgadas", 300f),
+                new Product(Product.GetNextId(),"003", "SDD", "1 TB Black", 500f)
+            };
+            _inventoryOperations = new List<InventoryOperation>()
+            {
+                new InventoryOperation(InventoryOperation.GetIdSequence(), 1,5,"Purchase",DateTime.Now),
+                new InventoryOperation(InventoryOperation.GetIdSequence(), 2,5,"Purchase",DateTime.Now),
+                new InventoryOperation(InventoryOperation.GetIdSequence(),3,5,"Purchase",DateTime.Now)
+            };
+            _productMock.Setup(rep => rep.GetAll()).Returns(_products);
+            _productMock.Setup(rep => rep.GetProduct(It.IsAny<int>())).Returns((int id) => _products.Single(x => x.ProductId == id));
+            _inventoryOpMock.Setup(rep => rep.GetInventoryOperation(It.IsAny<int>()))
+                .Returns((int id) => _inventoryOperations.Single(x => x.OperationId == id));
+            _inventoryOpMock.Setup(rep => rep.GetAll()).Returns(_inventoryOperations);
+            _shoppingCartItemMock.Setup(rep => rep.GetByCart(It.IsAny<int>())).Returns(_currentShoppingCartItems);
+
+            _inventoryOpMock.Setup(rep => rep.Insert(It.IsAny<InventoryOperationInsertModel>())).Returns(
+                (InventoryOperationInsertModel operation) =>
+                {
+                    var Operation = new InventoryOperation(InventoryOperation.GetIdSequence(), operation.ProductId, operation.Quantity, operation.Type, operation.Date);
+                    _inventoryOperations.Add(Operation);
+                    return Operation;
+                });
+            var store = new Store(_productMock.Object, _inventoryOpMock.Object, _shoppingCartItemMock.Object, _mailManagetMock.Object);
+            _existance = store.CheckExistance(_currentShoppingCart.CartId);
         }
 
         [When(@"I make the checkout")]
         public void WhenIMakeTheCheckout()
         {
             _total = 0.0f;
-            var store = new Store(_productMock.Object, _inventoryOpMock.Object, _shoppingCartItemMock.Object);
+            var store = new Store(_productMock.Object, _inventoryOpMock.Object, _shoppingCartItemMock.Object, _mailManagetMock.Object);
             if (_existance)
                 _total = store.CheckOut(_currentShoppingCart.CartId);
         }
@@ -113,19 +163,12 @@ namespace UnitTestProject1
             Assert.AreEqual(_inventoryOperations.Count ,cont);
         }
 
-        [Given(@"There is not  enough inventory")]
-        public void GivenThereIsNotEnoughInventory()
-        {
-            
-        }
-
         [Then(@"Send an error email")]
         public void ThenSendAnErrorEmail()
         {
-            ScenarioContext.Current.Pending();
+
+                _mailManagetMock.Verify(rep=>rep.SendEmail(It.IsAny<string>()));
+            
         }
-
-
-
     }
 }

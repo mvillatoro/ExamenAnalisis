@@ -26,5 +26,10 @@ namespace UnitTestProject1
         {
             return _idSequence++;
         }
+
+        public static void ResetSequence()
+        {
+            _idSequence = 1;
+        }
     }
 }

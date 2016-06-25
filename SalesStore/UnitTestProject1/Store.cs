@@ -14,18 +14,26 @@ namespace UnitTestProject1
         private readonly IProductRepository _productRepository;
         private readonly IShoppingCartItem _shoppingCartItem;
         private readonly IShoppingCartRepository _shoppingCartRepository;
+        private readonly IMailManager _mailManager;
       
 
-        public Store(IProductRepository productRepository, IInventoryOperationRepository inventoryOperationRepository, IShoppingCartItem shoppingCartItem)
+        public Store(IProductRepository productRepository, IInventoryOperationRepository inventoryOperationRepository, IShoppingCartItem shoppingCartItem, IMailManager mailManager)
         {
 
             _productRepository = productRepository;
             _inventoryOperationRepository = inventoryOperationRepository;
             _shoppingCartItem = shoppingCartItem;
+            _mailManager = mailManager;
         }
 
-        private bool CheckProductExistance(int productId)
+        public void SendProductNotification(string message)
         {
+            _mailManager.SendEmail(message);
+        }
+
+        private bool CheckProductExistance(int productId, int quantity)
+        {
+            var existance = false;
             var products = _productRepository.GetAll();
             var inventoryOperations = _inventoryOperationRepository.GetAll();
             int boughtQuantity=0;
@@ -40,7 +48,12 @@ namespace UnitTestProject1
                        .Select(x => x.ProductQuatity).ToList().Sum();
                 }
             }
-            return (boughtQuantity - soldQuantity)>0;
+            existance = (boughtQuantity - soldQuantity)>=quantity;
+            if (!existance)
+            {
+                SendProductNotification("We need to buy more " + _productRepository.GetProduct(productId));
+            }
+            return existance;
         }
 
         public bool CheckExistance(int cartId)
@@ -48,24 +61,28 @@ namespace UnitTestProject1
             var items = _shoppingCartItem.GetByCart(cartId);
             foreach (var item in items)
             {
-                var valid = CheckProductExistance(item.ProductId);
+                var valid = CheckProductExistance(item.ProductId, item.Quantity);
                 if (!valid)
                     return false;
             }
             return true;
         }
 
-        private void SellItem(int productId,int quantity)
+        private bool SellItem(int productId,int quantity)
         {
             var inventory = _inventoryOperationRepository.GetInventoryOperation(productId);
-            inventory.ReduceQuantity(quantity);
-            _inventoryOperationRepository.Insert( new InventoryOperationInsertModel
+            if (inventory.ReduceQuantity(quantity))
             {
-                ProductId = productId,
-                Quantity = quantity,
-                Type = "Sale",
-                Date = DateTime.Today 
-            });
+                _inventoryOperationRepository.Insert(new InventoryOperationInsertModel
+                {
+                    ProductId = productId,
+                    Quantity = quantity,
+                    Type = "Sale",
+                    Date = DateTime.Today
+                });
+                return true;
+            }
+            return false;
         }
         public float CheckOut(int cartId)
         {
@@ -73,8 +90,8 @@ namespace UnitTestProject1
             var items = _shoppingCartItem.GetByCart(cartId);
             foreach (var item in items)
             {
-                price += _productRepository.GetProduct(item.ProductId).ProductPrice*item.Quantity;
-                SellItem(item.ProductId, item.Quantity);
+                if(SellItem(item.ProductId, item.Quantity))
+                    price += _productRepository.GetProduct(item.ProductId).ProductPrice*item.Quantity;  
             }
             return price;
         }

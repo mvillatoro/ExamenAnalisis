@@ -31,7 +31,7 @@ Scenario: Checkout with out of stock
 		| 1  |Carlos|Pending|08/06/16|
 	And The items in the cart are 
 		| Id | CartId | ProductId | Quantity |
-		| 0  |   1    |    1      |     10    | 
+		| 0  |   1    |    1      |     10   | 
 		| 1  |   1    |    2      |     3    |
 		| 2  |   1    |    3      |     1    |
 	And There is not  enough inventory
