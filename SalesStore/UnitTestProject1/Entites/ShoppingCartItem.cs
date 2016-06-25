@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UnitTestProject1
+﻿namespace UnitTestProject1.Entites
 {
-    class ShoppingCartItem
+    public class ShoppingCartItem
     {
         private static int _idSequence = 1;
 

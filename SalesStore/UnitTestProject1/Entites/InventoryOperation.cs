@@ -29,5 +29,11 @@ namespace UnitTestProject1
         {
             return _idSequence++;
         }
+
+        public void ReduceQuantity(int quantity)
+        {
+            if(this.ProductQuatity>quantity)
+                this.ProductQuatity -= quantity;
+        }
     }
 }

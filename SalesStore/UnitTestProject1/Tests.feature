@@ -7,7 +7,7 @@
 Scenario: Shopping Cart Checkout
 	Given I have this ShoppingCart item 
 		| Id | User | State |  Date  |
-		| 1  |Carlos|Pending|24/06/16|
+		| 1  |Carlos|Pending|08/06/16|
 	And The items in the cart are 
 		| Id | CartId | ProductId | Quantity |
 		| 0  |   1    |    1      |     2    | 
@@ -17,7 +17,10 @@ Scenario: Shopping Cart Checkout
 	When I make the checkout
 	Then The total amount of the cart is 1800
 	And We subtract the quantity buyed
-		| Id | ProductId | Quantity | Type |   Date   |
-		| 1  |    1      |    3     | Sale | 10/06/16 |
-		| 2  |    2      |    2     | Sale | 10/06/16 |
-		| 3  |    3      |    4     | Sale | 10/06/16 |
+		| Id | ProductId | Quantity |   Type   |   Date   |
+		| 1  |    1      |    5     | Purchase | 10/06/16 |
+		| 2  |    2      |    5     | Purchase | 10/06/16 |
+		| 3  |    3      |    5     | Purchase | 10/06/16 |
+		| 4  |    1      |    2     |   Sale   | 10/06/16 |
+		| 5  |    2      |    3     |   Sale   | 10/06/16 |
+		| 6  |    3      |    1     |   Sale   | 10/06/16 |

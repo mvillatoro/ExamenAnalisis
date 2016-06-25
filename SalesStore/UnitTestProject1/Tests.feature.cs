@@ -88,7 +88,7 @@ this.ScenarioSetup(scenarioInfo);
                         "1",
                         "Carlos",
                         "Pending",
-                        "24/06/16"});
+                        "08/06/16"});
 #line 8
  testRunner.Given("I have this ShoppingCart item", ((string)(null)), table1, "Given ");
 #line hidden
@@ -130,19 +130,37 @@ this.ScenarioSetup(scenarioInfo);
             table3.AddRow(new string[] {
                         "1",
                         "1",
-                        "3",
-                        "Sale",
+                        "5",
+                        "Purchase",
                         "10/06/16"});
             table3.AddRow(new string[] {
                         "2",
                         "2",
-                        "2",
-                        "Sale",
+                        "5",
+                        "Purchase",
                         "10/06/16"});
             table3.AddRow(new string[] {
                         "3",
                         "3",
+                        "5",
+                        "Purchase",
+                        "10/06/16"});
+            table3.AddRow(new string[] {
                         "4",
+                        "1",
+                        "2",
+                        "Sale",
+                        "10/06/16"});
+            table3.AddRow(new string[] {
+                        "5",
+                        "2",
+                        "3",
+                        "Sale",
+                        "10/06/16"});
+            table3.AddRow(new string[] {
+                        "6",
+                        "3",
+                        "1",
                         "Sale",
                         "10/06/16"});
 #line 19
