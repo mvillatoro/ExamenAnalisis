@@ -13,13 +13,6 @@ namespace SalesStore
     {
         static void Main(string[] args)
         {
-            var mierda1 = new Product("p12","Penes", "Grosos venosos", 12);
-            var mierda2 = new Product("h54", "Dildo", "Azul y verde", 26);
-
-
-            Console.WriteLine(mierda1.GetProductId());
-            Console.WriteLine(mierda2.GetProductId());
-            Console.ReadKey();
         }
     }
 }
