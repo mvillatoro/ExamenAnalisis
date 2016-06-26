@@ -38,4 +38,19 @@ Scenario: Checkout with out of stock
 	When I make the checkout
 	Then Send an error email
 
+Scenario: Check old pending shopping carts
+		Given I have a date 
+			| day | month | year |
+			| 08    | 06  | 2016 |
+		And a list of ShoppingCarts
+			| Id | User   | State   | Date       |
+			| 1  | Edwin  | Pending | 08/07/2016 |
+			| 2  | Edwin  | Pending | 09/06/2016 |
+			| 3  | Carlos | Pending | 09/07/2016 |
+			| 3  | Edwin  | Paid    | 09/07/2016 |
+		And the user "Edwin"
+		Then we get the ShoppingCart
+			| Id | User   | State   | Date       |
+			| 2  | Edwin  | Pending | 08/07/2016 |
+
 	 

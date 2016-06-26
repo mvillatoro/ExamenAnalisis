@@ -10,6 +10,7 @@ using TechTalk.SpecFlow.Assist;
 using UnitTestProject1.Entites;
 using UnitTestProject1.Interfaces;
 using UnitTestProject1.Models;
+using System.Globalization;
 
 namespace UnitTestProject1
 {
@@ -26,7 +27,10 @@ namespace UnitTestProject1
         Mock<IShoppingCartItem> _shoppingCartItemMock = new Mock<IShoppingCartItem>();
         private bool _existance = false;
         private float _total;
-
+        private DateTime _referenceDate;
+        List<ShoppingCart> _shoppingCartCollection = new List<ShoppingCart>();
+        Mock<IShoppingCartRepository> _shoppingCartMock = new Mock<IShoppingCartRepository>();
+        string _user;
 
         [Given(@"I have this ShoppingCart item")]
         public void GivenIHaveThisShoppingCartItem(Table table)
@@ -170,5 +174,40 @@ namespace UnitTestProject1
                 _mailManagetMock.Verify(rep=>rep.SendEmail(It.IsAny<string>()));
             
         }
+
+        [Given(@"I have a date")]
+        public void GivenIHaveADate(Table table)
+        {
+            _referenceDate = new DateTime(int.Parse(table.Rows[0].Values.ToList()[2]), int.Parse(table.Rows[0].Values.ToList()[0]), int.Parse(table.Rows[0].Values.ToList()[1]));
+        }
+
+        [Given(@"a list of ShoppingCarts")]
+        public void GivenAListOfShoppingCarts(Table table)
+        {
+            _shoppingCartCollection.Clear();
+            foreach(var row in table.Rows)
+            {
+                var date = DateTime.ParseExact(row.Values.ToList()[3], "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                _shoppingCartCollection.Add(new ShoppingCart(int.Parse(row.Values.ToList()[0]), row.Values.ToList()[1], row.Values.ToList()[2],date));
+            }
+        }
+
+        [Given(@"the user ""(.*)""")]
+        public void GivenTheUser(string p0)
+        {
+            _user = p0;
+        }
+
+
+        [Then(@"we get the ShoppingCart")]
+        public void ThenWeGetTheShoppingCart(Table table)
+        {
+            _shoppingCartMock.Setup(rep => rep.GetPending()).Returns(_shoppingCartCollection.Where(cart => cart.CartState == "Pending" && (cart.CartCreationTime.Month- _referenceDate.Month) + 12 * (cart.CartCreationTime.Year- _referenceDate.Year) >= 1).ToList());
+            Store store = new Store(_shoppingCartMock.Object);
+            var pendingCarts = store.GetUserPendingCarts(_user);
+            Assert.AreEqual(pendingCarts[0].CartId, int.Parse(table.Rows[0].Values.ToList()[0]));
+        }
+
+
     }
 }

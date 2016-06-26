@@ -222,6 +222,72 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Check old pending shopping carts")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Tests")]
+        public virtual void CheckOldPendingShoppingCarts()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Check old pending shopping carts", ((string[])(null)));
+#line 41
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                        "day",
+                        "month",
+                        "year"});
+            table6.AddRow(new string[] {
+                        "08",
+                        "06",
+                        "2016"});
+#line 42
+  testRunner.Given("I have a date", ((string)(null)), table6, "Given ");
+#line hidden
+            TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Id",
+                        "User",
+                        "State",
+                        "Date"});
+            table7.AddRow(new string[] {
+                        "1",
+                        "Edwin",
+                        "Pending",
+                        "08/07/2016"});
+            table7.AddRow(new string[] {
+                        "2",
+                        "Edwin",
+                        "Pending",
+                        "09/06/2016"});
+            table7.AddRow(new string[] {
+                        "3",
+                        "Carlos",
+                        "Pending",
+                        "09/07/2016"});
+            table7.AddRow(new string[] {
+                        "3",
+                        "Edwin",
+                        "Paid",
+                        "09/07/2016"});
+#line 45
+  testRunner.And("a list of ShoppingCarts", ((string)(null)), table7, "And ");
+#line 51
+  testRunner.And("the user \"Edwin\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Id",
+                        "User",
+                        "State",
+                        "Date"});
+            table8.AddRow(new string[] {
+                        "2",
+                        "Edwin",
+                        "Pending",
+                        "08/07/2016"});
+#line 52
+  testRunner.Then("we get the ShoppingCart", ((string)(null)), table8, "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore
