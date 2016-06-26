@@ -26,6 +26,11 @@ namespace UnitTestProject1
             _mailManager = mailManager;
         }
 
+        public Store(IShoppingCartRepository shoppingCartRepository)
+        {
+            _shoppingCartRepository = shoppingCartRepository;
+        }
+
         public void SendProductNotification(string message)
         {
             _mailManager.SendEmail(message);
@@ -94,6 +99,20 @@ namespace UnitTestProject1
                     price += _productRepository.GetProduct(item.ProductId).ProductPrice*item.Quantity;  
             }
             return price;
+        }
+
+        public List<ShoppingCart> GetUserPendingCarts(string username)
+        {
+            var carts = _shoppingCartRepository.GetPending();
+            List<ShoppingCart> userCarts = new List<ShoppingCart>();
+            foreach(var shoppingCart in carts)
+            {
+                if(shoppingCart.CartUserName == username)
+                {
+                    userCarts.Add(shoppingCart);
+                }
+            }
+            return userCarts;
         }
     }
 }
