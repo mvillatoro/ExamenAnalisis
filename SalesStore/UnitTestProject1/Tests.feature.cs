@@ -288,6 +288,36 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Checkout paid cart")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Tests")]
+        public virtual void CheckoutPaidCart()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Checkout paid cart", ((string[])(null)));
+#line 56
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Id",
+                        "User",
+                        "State",
+                        "Date"});
+            table9.AddRow(new string[] {
+                        "2",
+                        "Carlos",
+                        "Paid",
+                        "08/07/2016"});
+#line 57
+  testRunner.Given("I have the cart", ((string)(null)), table9, "Given ");
+#line 60
+  testRunner.When("I make the checkout", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 61
+  testRunner.Then("an error of already paid cart with the message \"Cart Already Paid\" must be showed" +
+                    "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

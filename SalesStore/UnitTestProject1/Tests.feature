@@ -53,4 +53,9 @@ Scenario: Check old pending shopping carts
 			| Id | User   | State   | Date       |
 			| 2  | Edwin  | Pending | 08/07/2016 |
 
-	 
+Scenario: Checkout paid cart
+		Given I have the cart 
+			| Id | User   | State   | Date       |
+			| 2  | Carlos | Paid    | 08/07/2016 |
+		When I make the checkout
+		Then an error of already paid cart with the message "Cart Already Paid" must be showed

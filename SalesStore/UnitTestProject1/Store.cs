@@ -1,8 +1,10 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnitTestProject1.Exceptions;
 using UnitTestProject1.Interfaces;
 using UnitTestProject1.Models;
 
@@ -17,13 +19,14 @@ namespace UnitTestProject1
         private readonly IMailManager _mailManager;
       
 
-        public Store(IProductRepository productRepository, IInventoryOperationRepository inventoryOperationRepository, IShoppingCartItem shoppingCartItem, IMailManager mailManager)
+        public Store(IProductRepository productRepository, IInventoryOperationRepository inventoryOperationRepository, IShoppingCartItem shoppingCartItem, IMailManager mailManager, IShoppingCartRepository shoppingCartRepository)
         {
 
             _productRepository = productRepository;
             _inventoryOperationRepository = inventoryOperationRepository;
             _shoppingCartItem = shoppingCartItem;
             _mailManager = mailManager;
+            _shoppingCartRepository = shoppingCartRepository;
         }
 
         public Store(IShoppingCartRepository shoppingCartRepository)
@@ -64,6 +67,7 @@ namespace UnitTestProject1
         public bool CheckExistance(int cartId)
         {
             var items = _shoppingCartItem.GetByCart(cartId);
+            if(items!=null)
             foreach (var item in items)
             {
                 var valid = CheckProductExistance(item.ProductId, item.Quantity);
@@ -89,10 +93,14 @@ namespace UnitTestProject1
             }
             return false;
         }
+
         public float CheckOut(int cartId)
         {
             float price = 0.0f;
             var items = _shoppingCartItem.GetByCart(cartId);
+            var cart = _shoppingCartRepository.Get(cartId);
+            if(cart.CartState.Equals("Paid"))
+                throw new AlreadyPaidException("Cart Already Paid");
             foreach (var item in items)
             {
                 if(SellItem(item.ProductId, item.Quantity))

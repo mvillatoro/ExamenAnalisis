@@ -62,6 +62,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Exceptions\AlreadyPaidException.cs" />
     <Compile Include="Interfaces\IMailManager.cs" />
     <Compile Include="Interfaces\IInventoryOperationRepository.cs" />
     <Compile Include="Interfaces\IProductRepository.cs" />
