@@ -11,6 +11,7 @@ using UnitTestProject1.Entites;
 using UnitTestProject1.Interfaces;
 using UnitTestProject1.Models;
 using System.Globalization;
+using UnitTestProject1.Exceptions;
 
 namespace UnitTestProject1
 {
@@ -31,6 +32,7 @@ namespace UnitTestProject1
         List<ShoppingCart> _shoppingCartCollection = new List<ShoppingCart>();
         Mock<IShoppingCartRepository> _shoppingCartMock = new Mock<IShoppingCartRepository>();
         string _user;
+        int _cartId;
 
         [Given(@"I have this ShoppingCart item")]
         public void GivenIHaveThisShoppingCartItem(Table table)
@@ -92,6 +94,7 @@ namespace UnitTestProject1
                 .Returns((int id)=>_inventoryOperations.Single(x=>x.OperationId==id));
             _inventoryOpMock.Setup(rep => rep.GetAll()).Returns(_inventoryOperations);
             _shoppingCartItemMock.Setup(rep => rep.GetByCart(It.IsAny<int>())).Returns(_currentShoppingCartItems);
+            _shoppingCartMock.Setup(rep => rep.Get(It.IsAny<int>())).Returns(new ShoppingCart(1, "Edwin", "Pending", DateTime.Now));
 
             _inventoryOpMock.Setup(rep => rep.Insert(It.IsAny<InventoryOperationInsertModel>())).Returns(
                 (InventoryOperationInsertModel operation) =>
@@ -100,7 +103,7 @@ namespace UnitTestProject1
                     _inventoryOperations.Add(Operation);
                     return Operation;
                 });
-            var store = new Store(_productMock.Object, _inventoryOpMock.Object, _shoppingCartItemMock.Object, _mailManagetMock.Object);
+            var store = new Store(_productMock.Object, _inventoryOpMock.Object, _shoppingCartItemMock.Object, _mailManagetMock.Object, _shoppingCartMock.Object);
             _existance = store.CheckExistance(_currentShoppingCart.CartId);
             
         }
@@ -126,6 +129,7 @@ namespace UnitTestProject1
                 .Returns((int id) => _inventoryOperations.Single(x => x.OperationId == id));
             _inventoryOpMock.Setup(rep => rep.GetAll()).Returns(_inventoryOperations);
             _shoppingCartItemMock.Setup(rep => rep.GetByCart(It.IsAny<int>())).Returns(_currentShoppingCartItems);
+            _shoppingCartMock.Setup(rep => rep.Get(It.IsAny<int>())).Returns(new ShoppingCart(1, "Edwin", "Pending", DateTime.Now));
 
             _inventoryOpMock.Setup(rep => rep.Insert(It.IsAny<InventoryOperationInsertModel>())).Returns(
                 (InventoryOperationInsertModel operation) =>
@@ -134,7 +138,7 @@ namespace UnitTestProject1
                     _inventoryOperations.Add(Operation);
                     return Operation;
                 });
-            var store = new Store(_productMock.Object, _inventoryOpMock.Object, _shoppingCartItemMock.Object, _mailManagetMock.Object);
+            var store = new Store(_productMock.Object, _inventoryOpMock.Object, _shoppingCartItemMock.Object, _mailManagetMock.Object, _shoppingCartMock.Object);
             _existance = store.CheckExistance(_currentShoppingCart.CartId);
         }
 
@@ -142,7 +146,7 @@ namespace UnitTestProject1
         public void WhenIMakeTheCheckout()
         {
             _total = 0.0f;
-            var store = new Store(_productMock.Object, _inventoryOpMock.Object, _shoppingCartItemMock.Object, _mailManagetMock.Object);
+            var store = new Store(_productMock.Object, _inventoryOpMock.Object, _shoppingCartItemMock.Object, _mailManagetMock.Object, _shoppingCartMock.Object);
             if (_existance)
                 _total = store.CheckOut(_currentShoppingCart.CartId);
         }
@@ -206,6 +210,45 @@ namespace UnitTestProject1
             Store store = new Store(_shoppingCartMock.Object);
             var pendingCarts = store.GetUserPendingCarts(_user);
             Assert.AreEqual(pendingCarts[0].CartId, int.Parse(table.Rows[0].Values.ToList()[0]));
+        }
+
+
+        [Given(@"i have a cart id (.*)")]
+        public void GivenIHaveACartId(int p0)
+        {
+            _cartId = p0;
+        }
+
+        [Given(@"a shopping cart")]
+        public void GivenAShoppingCart(Table table)
+        {
+            ShoppingCart cart = new ShoppingCart(int.Parse(table.Rows[0].Values.ToList()[0]), table.Rows[0].Values.ToList()[1],
+                table.Rows[0].Values.ToList()[2], DateTime.Parse(table.Rows[0].Values.ToList()[3]));
+
+            _shoppingCartCollection.Clear();
+            _shoppingCartCollection.Add(cart);
+        }
+
+        [When(@"I make checkout")]
+        public void WhenIMakeCheckout()
+        {
+            _shoppingCartMock.Setup(rep => rep.Get(It.IsAny<int>())).Returns(_shoppingCartCollection[0]);
+            Store store = new Store(_shoppingCartMock.Object, _shoppingCartItemMock.Object, _productMock.Object);
+            try
+            {
+                store.CheckOut(_cartId);
+            }
+            catch(CartAlreadyPaidException ex)
+            {
+                ScenarioContext.Current[("Error")] = ex;
+            }
+            
+        }
+
+        [Then(@"we receive an Exception")]
+        public void ThenWeReceiveAnException()
+        {
+            
         }
 
 

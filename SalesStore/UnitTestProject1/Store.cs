@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnitTestProject1.Exceptions;
 using UnitTestProject1.Interfaces;
 using UnitTestProject1.Models;
 
@@ -17,18 +18,26 @@ namespace UnitTestProject1
         private readonly IMailManager _mailManager;
       
 
-        public Store(IProductRepository productRepository, IInventoryOperationRepository inventoryOperationRepository, IShoppingCartItem shoppingCartItem, IMailManager mailManager)
+        public Store(IProductRepository productRepository, IInventoryOperationRepository inventoryOperationRepository, IShoppingCartItem shoppingCartItem, IMailManager mailManager, IShoppingCartRepository shoppingCartRepository)
         {
 
             _productRepository = productRepository;
             _inventoryOperationRepository = inventoryOperationRepository;
             _shoppingCartItem = shoppingCartItem;
             _mailManager = mailManager;
+            _shoppingCartRepository = shoppingCartRepository;
         }
 
         public Store(IShoppingCartRepository shoppingCartRepository)
         {
             _shoppingCartRepository = shoppingCartRepository;
+        }
+
+        public Store(IShoppingCartRepository shoppingCartRepository, IShoppingCartItem shoppingCartItem, IProductRepository productRepository)
+        {
+            _shoppingCartRepository = shoppingCartRepository;
+            _shoppingCartItem = shoppingCartItem;
+            _productRepository = productRepository;
         }
 
         public void SendProductNotification(string message)
@@ -92,6 +101,11 @@ namespace UnitTestProject1
         public float CheckOut(int cartId)
         {
             float price = 0.0f;
+            var cart = _shoppingCartRepository.Get(cartId);
+            if(cart.CartState == "Paid")
+            {
+                throw new CartAlreadyPaidException();
+            }
             var items = _shoppingCartItem.GetByCart(cartId);
             foreach (var item in items)
             {

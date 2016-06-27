@@ -53,4 +53,12 @@ Scenario: Check old pending shopping carts
 			| Id | User   | State   | Date       |
 			| 2  | Edwin  | Pending | 08/07/2016 |
 
+Scenario: Checkout of paid shopping carts
+		Given i have a cart id 5
+		And a shopping cart
+			| Id | User  | State | Date       |
+			| 5  | Edwin | Paid  | 01/04/2015 |
+		When I make checkout 
+		Then we receive an Exception
+
 	 
