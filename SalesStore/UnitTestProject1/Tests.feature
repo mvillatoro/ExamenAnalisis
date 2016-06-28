@@ -3,7 +3,7 @@
 	We do silly tests
 	So we can try not to fuck shit up
 
-@mytag
+
 Scenario: Shopping Cart Checkout
 	Given I have this ShoppingCart item 
 		| Id | User | State |  Date  |
@@ -52,5 +52,26 @@ Scenario: Check old pending shopping carts
 		Then we get the ShoppingCart
 			| Id | User   | State   | Date       |
 			| 2  | Edwin  | Pending | 08/07/2016 |
+		
+Scenario: Products in stock must be correct
+	Given I have this products
+			| Id | Code | Name    | Description | Price |
+			| 1  |  001 | USB     | 2 GB Black  | 200   |
+			| 2  |  002 | Monitor | 40 pulgadas | 300   |
+			| 3  |  003 | SSD     | 1 TB Black  | 500   |
 
-	 
+	And I have an list of inventory movements
+			| Id | ProductId | Quantity |   Type   |   Date   |
+			| 1  |    1      |    5     | Purchase | 10/06/16 |
+			| 2  |    2      |    5     | Purchase | 10/06/16 |
+			| 3  |    3      |    5     | Purchase | 10/06/16 |
+			| 4  |    1      |    2     |   Sale   | 10/06/16 |
+			| 5  |    2      |    3     |   Sale   | 10/06/16 |
+			| 6  |    3      |    1     |   Sale   | 10/06/16 |
+
+	When I create the report
+	Then The total products in stock must be correct
+			| ProductId | Quantity |
+			|    1      |    3     |
+			|    2      |    2     |
+			|    3      |    4     |

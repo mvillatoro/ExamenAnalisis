@@ -71,11 +71,9 @@ namespace UnitTestProject1
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Shopping Cart Checkout")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Tests")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("mytag")]
         public virtual void ShoppingCartCheckout()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Shopping Cart Checkout", new string[] {
-                        "mytag"});
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Shopping Cart Checkout", ((string[])(null)));
 #line 7
 this.ScenarioSetup(scenarioInfo);
 #line hidden
@@ -285,6 +283,107 @@ this.ScenarioSetup(scenarioInfo);
                         "08/07/2016"});
 #line 52
   testRunner.Then("we get the ShoppingCart", ((string)(null)), table8, "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Products in stock must be correct")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Tests")]
+        public virtual void ProductsInStockMustBeCorrect()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Products in stock must be correct", ((string[])(null)));
+#line 56
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Id",
+                        "Code",
+                        "Name",
+                        "Description",
+                        "Price"});
+            table9.AddRow(new string[] {
+                        "1",
+                        "001",
+                        "USB",
+                        "2 GB Black",
+                        "200"});
+            table9.AddRow(new string[] {
+                        "2",
+                        "002",
+                        "Monitor",
+                        "40 pulgadas",
+                        "300"});
+            table9.AddRow(new string[] {
+                        "3",
+                        "003",
+                        "SSD",
+                        "1 TB Black",
+                        "500"});
+#line 57
+ testRunner.Given("I have this products", ((string)(null)), table9, "Given ");
+#line hidden
+            TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Id",
+                        "ProductId",
+                        "Quantity",
+                        "Type",
+                        "Date"});
+            table10.AddRow(new string[] {
+                        "1",
+                        "1",
+                        "5",
+                        "Purchase",
+                        "10/06/16"});
+            table10.AddRow(new string[] {
+                        "2",
+                        "2",
+                        "5",
+                        "Purchase",
+                        "10/06/16"});
+            table10.AddRow(new string[] {
+                        "3",
+                        "3",
+                        "5",
+                        "Purchase",
+                        "10/06/16"});
+            table10.AddRow(new string[] {
+                        "4",
+                        "1",
+                        "2",
+                        "Sale",
+                        "10/06/16"});
+            table10.AddRow(new string[] {
+                        "5",
+                        "2",
+                        "3",
+                        "Sale",
+                        "10/06/16"});
+            table10.AddRow(new string[] {
+                        "6",
+                        "3",
+                        "1",
+                        "Sale",
+                        "10/06/16"});
+#line 63
+ testRunner.And("I have an list of inventory movements", ((string)(null)), table10, "And ");
+#line 72
+ testRunner.When("I create the report", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+            TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
+                        "ProductId",
+                        "Quantity"});
+            table11.AddRow(new string[] {
+                        "1",
+                        "3"});
+            table11.AddRow(new string[] {
+                        "2",
+                        "2"});
+            table11.AddRow(new string[] {
+                        "3",
+                        "4"});
+#line 73
+ testRunner.Then("The total products in stock must be correct", ((string)(null)), table11, "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

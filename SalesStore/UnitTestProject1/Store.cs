@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.Components.DictionaryAdapter;
 using UnitTestProject1.Interfaces;
 using UnitTestProject1.Models;
 
@@ -15,7 +16,6 @@ namespace UnitTestProject1
         private readonly IShoppingCartItem _shoppingCartItem;
         private readonly IShoppingCartRepository _shoppingCartRepository;
         private readonly IMailManager _mailManager;
-      
 
         public Store(IProductRepository productRepository, IInventoryOperationRepository inventoryOperationRepository, IShoppingCartItem shoppingCartItem, IMailManager mailManager)
         {
@@ -25,17 +25,14 @@ namespace UnitTestProject1
             _shoppingCartItem = shoppingCartItem;
             _mailManager = mailManager;
         }
-
         public Store(IShoppingCartRepository shoppingCartRepository)
         {
             _shoppingCartRepository = shoppingCartRepository;
         }
-
         public void SendProductNotification(string message)
         {
             _mailManager.SendEmail(message);
         }
-
         private bool CheckProductExistance(int productId, int quantity)
         {
             var existance = false;
@@ -60,7 +57,6 @@ namespace UnitTestProject1
             }
             return existance;
         }
-
         public bool CheckExistance(int cartId)
         {
             var items = _shoppingCartItem.GetByCart(cartId);
@@ -72,7 +68,6 @@ namespace UnitTestProject1
             }
             return true;
         }
-
         private bool SellItem(int productId,int quantity)
         {
             var inventory = _inventoryOperationRepository.GetInventoryOperation(productId);
@@ -100,7 +95,6 @@ namespace UnitTestProject1
             }
             return price;
         }
-
         public List<ShoppingCart> GetUserPendingCarts(string username)
         {
             var carts = _shoppingCartRepository.GetPending();
@@ -113,6 +107,25 @@ namespace UnitTestProject1
                 }
             }
             return userCarts;
+        }
+        public Dictionary<int, int> PrintStockReport(List<InventoryOperation> operations,  List<Product> productList)
+        {
+            var productReport = new Dictionary<int, int>();
+            var productCount = 0;
+            foreach (var product in productList)
+            {
+                foreach (var operation in operations)
+                {
+                    if (operation.ProductId != product.ProductId) continue;
+                    if (operation.Type == "Purchase")
+                        productCount = productCount + operation.ProductQuatity;
+                    else
+                        productCount = productCount - operation.ProductQuatity;
+                }
+                productReport.Add(product.ProductId, productCount);
+                productCount = 0;
+            }
+            return productReport;
         }
     }
 }
