@@ -6,5 +6,6 @@ namespace UnitTestProject1.Interfaces
     {
         List<ShoppingCart> GetAll();
         List<ShoppingCart> GetPending();
+        ShoppingCart Get(int cartId);
     }
 }

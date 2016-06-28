@@ -75,3 +75,10 @@ Scenario: Products in stock must be correct
 			|    1      |    3     |
 			|    2      |    2     |
 			|    3      |    4     |
+
+Scenario: Checkout paid cart
+		Given I have the cart 
+			| Id | User   | State   | Date       |
+			| 2  | Carlos | Paid    | 08/07/2016 |
+		When I make the checkout
+		Then an error of already paid cart with the message "Cart Already Paid" must be showed
